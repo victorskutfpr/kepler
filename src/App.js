@@ -1,25 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+import { KeplerGl } from 'kepler.gl';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { Provider } from 'react-redux';
+import { taskMiddleware } from 'react-palm/tasks';
+import { keplerGlReducer } from 'kepler.gl/reducers';
+import { React } from 'react';
+
+// integrate kepler.gl reducer into your app's reducer
+const reducer = combineReducers({
+  keplerGl: keplerGlReducer
+  // your other reducers here
+});
+
+// create store
+const store = createStore(reducer, {}, applyMiddleware(taskMiddleware));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <KeplerGl
+        id="map"
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      />
   );
 }
 
 export default App;
+
+
