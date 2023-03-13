@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { KeplerGl } from 'kepler.gl';
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { combineReducers, applyMiddleware, legacy_createStore} from 'redux';
 import { Provider } from 'react-redux';
 import { taskMiddleware } from 'react-palm/tasks';
 import { keplerGlReducer } from 'kepler.gl/reducers';
@@ -14,19 +14,28 @@ const reducer = combineReducers({
 });
 
 // create store
-const store = createStore(reducer, {}, applyMiddleware(taskMiddleware));
+const store = legacy_createStore(
+  reducer, {}, applyMiddleware(taskMiddleware)
+)
 
 function App() {
   return (
-      <KeplerGl
-        id="map"
-        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      />
+    <Provider store={store}>
+      <Map />
+    </Provider>
   );
 }
 
+function Map() {
+  return (
+    <KeplerGl
+    id="map"
+    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+    width={window.innerWidth}
+    height={window.innerHeight}
+  />
+  );
+}
 export default App;
 
 
