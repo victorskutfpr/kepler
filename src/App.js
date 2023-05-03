@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { keplerGlReducer } from "kepler.gl/reducers";
+import React from "react";
+import { taskMiddleware } from "react-palm/tasks";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import KeplerGl from "kepler.gl";
+import { Provider, useDispatch } from "kepler.gl/node_modules/react-redux";
+import { addDataToMap } from "kepler.gl/actions";
+import Map from "./components/Kepler";
 
-function App() {
+const reducer = combineReducers({
+  keplerGl: keplerGlReducer,
+});
+
+const store = createStore(reducer, {}, applyMiddleware(taskMiddleware));
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Map
+        onClick={() => {
+          console.log("click");
+        }}
+      />
+    </Provider>
   );
 }
-
-export default App;
